@@ -9,9 +9,12 @@
     "heroku-postbuild": "npm run build"
   },
   "dependencies": {
+    "@react-firebase/auth": "^0.2.10",
+    "firebase": "^7.12.0",
     "firebase-tools": "^7.16.0",
     "next": "9.3.1",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "styled-components": "^5.0.1"
   }
 }
