@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
+import "../config/firebaseConfig";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -13,11 +14,23 @@ class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          <script src="/__/firebase/7.12.0/firebase-app.js"></script>
+          <style jsx global>{`
+            html,
+            body {
+              padding: 0;
+              margin: 0;
+              font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+                Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+                sans-serif;
+            }
 
-          <script src="/__/firebase/7.12.0/firebase-analytics.js"></script>
-
-          <script src="/__/firebase/init.js"></script>
+            * {
+              box-sizing: border-box;
+            }
+            button {
+              cursor: pointer;
+            }
+          `}</style>
         </body>
       </Html>
     );
