@@ -1,6 +1,9 @@
-import styled from "styled-components";
-import firebase from "firebase/app";
-import "firebase/auth";
+import styled from 'styled-components';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import Link from 'next/link';
+
+import { color } from '../libs/variables';
 
 const Header = () => {
   const login = provider => {
@@ -50,32 +53,60 @@ const Header = () => {
     }
   };
 
+  const openSocialLoginModal = () => {
+    console.log('open');
+  };
+
   return (
     <Container>
-      <h1>Stay Home</h1>
-      <button onClick={googleLogin}>Google</button>
-      <button onClick={facebookLogin}>Facebook</button>
-      <button onClick={twitterLogin}>Twitter</button>
+      <div>
+        <Link href="/">
+          <a>
+            <h1>Stay Live</h1>
+          </a>
+        </Link>
+        <button onClick={openSocialLoginModal}>Fazer login</button>
+        {/* <button onClick={googleLogin}>Google</button>
+        <button onClick={facebookLogin}>Facebook</button>
+        <button onClick={twitterLogin}>Twitter</button> */}
+      </div>
     </Container>
   );
 };
 
 const Container = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-itens: center;
-  flex-direction: row;
-  background-color: orange;
+  background-color: ${color.blue};
   width: 100%;
-  padding: 10px 30px;
-  h1 {
-    margin: 0;
-    padding: 0;
-  }
-  button {
-    border: 1px solid black;
-    background: none;
-    font-weight: bold;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 58px;
+  z-index: 1;
+  div {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-itens: center;
+    flex-direction: row;
+    padding: 10px 0px;
+    margin: 0 30px;
+    color: ${color.white};
+    a {
+      text-decoration: none;
+    }
+    h1 {
+      margin: 0;
+      padding: 0;
+      color: white;
+    }
+    button {
+      border: 1px solid ${color.white};
+      background: none;
+      font-weight: bold;
+      color: ${color.white};
+    }
   }
 `;
 

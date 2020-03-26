@@ -1,13 +1,13 @@
-const { parsed: localEnv } = require("dotenv").config();
-const webpack = require("webpack");
-const Dotenv = require("dotenv-webpack");
-const path = require("path");
+const { parsed: localEnv } = require('dotenv').config();
+const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
+const path = require('path');
 
 module.exports = {
   webpack(config) {
     config.plugins.push(new webpack.EnvironmentPlugin(localEnv));
 
-    config.node = { fs: "empty" };
+    config.node = { fs: 'empty' };
     config.plugins = config.plugins || [];
 
     config.plugins = [
@@ -15,9 +15,9 @@ module.exports = {
 
       // Read the .env file
       new Dotenv({
-        path: path.join(__dirname, ".env"),
-        systemvars: true
-      })
+        path: path.join(__dirname, '.env'),
+        systemvars: true,
+      }),
     ];
 
     return config;
@@ -30,6 +30,6 @@ module.exports = {
     storageBucket: process.env.storageBucket,
     messagingSenderId: process.env.messagingSenderId,
     appId: process.env.appId,
-    measurementId: process.env.measurementId
-  }
+    measurementId: process.env.measurementId,
+  },
 };
