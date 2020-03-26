@@ -1,5 +1,5 @@
-import Document, { Html, Head, Main, NextScript } from "next/document";
-import "../config/firebaseConfig";
+import Document, { Html, Head, Main, NextScript } from 'next/document';
+import '../config/firebaseConfig';
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -14,14 +14,16 @@ class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
+          <link
+            href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
+            rel="stylesheet"
+          ></link>
           <style jsx global>{`
             html,
             body {
               margin: 0 !important;
-              font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-                Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-                sans-serif;
               background-color: #eaf4f4;
+              font-family: 'Roboto', sans-serif;
             }
 
             * {
