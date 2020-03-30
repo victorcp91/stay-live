@@ -11,32 +11,34 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
+          <link
+            href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
+            rel="stylesheet"
+          />
           <style>{`
             html,
             body {
               margin: 0 !important;
               background-color: #eaf4f4;
-              font-family: 'Roboto', sans-serif;
             }
-
             * {
               box-sizing: border-box;
             }
             button {
               cursor: pointer;
               outline: none;
-            }
-            button {
-            }
+           }
           `}</style>
         </Head>
         <body>
           <Main />
           <NextScript />
-          <link
-            href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
-            rel="stylesheet"
-          ></link>
+          <style jsx global>{`
+            html,
+            body {
+              font-family: 'Roboto', sans-serif;
+            }
+          `}</style>
         </body>
       </Html>
     );
