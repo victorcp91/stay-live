@@ -1,5 +1,4 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-import styled from 'styled-components';
 import '../config/firebaseConfig';
 
 class MyDocument extends Document {
@@ -12,15 +11,21 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head />
-        <Body>
+        <body>
           <Main />
           <NextScript />
+          <link
+            href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
+            rel="stylesheet"
+          ></link>
           <style jsx global>{`
             html,
             body {
+              margin: 0 !important;
               background-color: #eaf4f4;
               font-family: 'Roboto', sans-serif;
             }
+
             * {
               box-sizing: border-box;
             }
@@ -28,20 +33,13 @@ class MyDocument extends Document {
               cursor: pointer;
               outline: none;
             }
+            button {
+            }
           `}</style>
-          <link
-            href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
-            rel="stylesheet"
-          ></link>
-        </Body>
+        </body>
       </Html>
     );
   }
 }
-
-const Body = styled.body`
-  margin: 0;
-  padding: 0;
-`;
 
 export default MyDocument;
