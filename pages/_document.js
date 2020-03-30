@@ -22,6 +22,7 @@ class MyDocument extends Document {
             html,
             body {
               margin: 0 !important;
+              padding: 0 !important;
               background-color: #eaf4f4;
               font-family: 'Roboto', sans-serif;
             }
