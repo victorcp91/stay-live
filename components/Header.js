@@ -75,8 +75,16 @@ const Header = () => {
                 )}
               </div>
               <ul className="userOptions">
-                <li>{translate('profile', language)}</li>
-                <li>{translate('addLive', language)}</li>
+                <li>
+                  <Link href={`/profile/`}>
+                    <a>{translate('profile', language)}</a>
+                  </Link>
+                </li>
+                <li>
+                  <Link href={`/registerLive`}>
+                    <a> {translate('addLive', language)}</a>
+                  </Link>
+                </li>
                 <li>
                   <button onClick={logout} type="button">
                     {translate('logout', language)}
@@ -184,9 +192,17 @@ const Container = styled.header`
         padding: 10px 20px;
         text-align: center;
         font-size: 14px;
-        li {
+        li,
+        a {
           white-space: nowrap;
-          margin: 15px 0;
+          margin: 15px auto;
+          text-align: center;
+          text-decoration: none;
+          color: white;
+          width: fit-content;
+        }
+        button {
+          font-size: 14px;
         }
       }
       &:hover {

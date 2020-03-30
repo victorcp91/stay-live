@@ -1,63 +1,15 @@
 import { useState, useMemo, useEffect } from 'react';
+import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import Link from 'next/link';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import 'moment/locale/es';
 
 import { color } from '../libs/variables';
 
-const LivesList = () => {
+const LivesList = ({ lives }) => {
   const language = useSelector((state) => state.settings.language);
-
-  const lives = [
-    {
-      id: 1,
-      title: 'Britney Returns',
-      description: 'My lonelyness is saving me',
-      channel: 'youtube',
-      link: 'https://youtube.com',
-      startDate: '2020-03-26T23:12:45.678Z',
-      endDate: '2020-03-26T23:55:45.678Z',
-    },
-    {
-      id: 2,
-      title: 'Britney Returns',
-      description: 'My lonelyness is saving me',
-      channel: 'youtube',
-      link: 'https://youtube.com',
-      startDate: '2020-03-26T22:12:45.678Z',
-      endDate: '2020-03-26T23:12:45.678Z',
-    },
-    {
-      id: 3,
-      title: 'Britney Returns',
-      description: 'My lonelyness is saving me',
-      channel: 'youtube',
-      link: 'https://youtube.com',
-      startDate: '2020-03-27T22:12:45.678Z',
-      endDate: '2020-03-27T23:12:45.678Z',
-    },
-    {
-      id: 4,
-      title: 'Britney Returns',
-      description: 'My lonelyness is saving me',
-      channel: 'youtube',
-      link: 'https://youtube.com',
-      startDate: '2020-03-29T22:12:45.678Z',
-      endDate: '2020-03-29T23:12:45.678Z',
-    },
-    {
-      id: 5,
-      title: 'Britney Returns',
-      description: 'My lonelyness is saving me',
-      channel: 'youtube',
-      link: 'https://youtube.com',
-      startDate: '2020-03-29T23:12:45.678Z',
-      endDate: '2020-03-29T23:12:45.678Z',
-    },
-  ];
 
   const orderedLives = useMemo(() => {
     return lives.sort((a, b) => a - b);
