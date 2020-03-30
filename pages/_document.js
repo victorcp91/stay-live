@@ -10,15 +10,8 @@ class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <Head />
-        <body>
-          <Main />
-          <NextScript />
-          <link
-            href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
-            rel="stylesheet"
-          ></link>
-          <style jsx global>{`
+        <Head>
+          <style>{`
             html,
             body {
               margin: 0 !important;
@@ -36,6 +29,14 @@ class MyDocument extends Document {
             button {
             }
           `}</style>
+        </Head>
+        <body>
+          <Main />
+          <NextScript />
+          <link
+            href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
+            rel="stylesheet"
+          ></link>
         </body>
       </Html>
     );
