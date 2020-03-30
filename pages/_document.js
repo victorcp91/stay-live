@@ -15,6 +15,20 @@ class MyDocument extends Document {
         <Body>
           <Main />
           <NextScript />
+          <style jsx global>{`
+            html,
+            body {
+              background-color: #eaf4f4;
+              font-family: 'Roboto', sans-serif;
+            }
+            * {
+              box-sizing: border-box;
+            }
+            button {
+              cursor: pointer;
+              outline: none;
+            }
+          `}</style>
           <link
             href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
             rel="stylesheet"
@@ -26,17 +40,8 @@ class MyDocument extends Document {
 }
 
 const Body = styled.body`
-  margin: 0 !important;
-  padding: 0 !important;
-  background-color: #eaf4f4;
-  font-family: 'Roboto', sans-serif;
-  * {
-    box-sizing: border-box;
-  }
-  button {
-    cursor: pointer;
-    outline: none;
-  }
+  margin: 0;
+  padding: 0;
 `;
 
 export default MyDocument;
