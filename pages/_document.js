@@ -31,6 +31,7 @@ class MyDocument extends Document {
             }
             button {
               cursor: pointer;
+              outline: none;
             }
           `}</style>
         </body>

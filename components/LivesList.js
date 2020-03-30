@@ -1,11 +1,16 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Link from 'next/link';
 import moment from 'moment';
+import 'moment/locale/pt-br';
+import 'moment/locale/es';
 
 import { color } from '../libs/variables';
 
 const LivesList = () => {
+  const language = useSelector((state) => state.settings.language);
+
   const lives = [
     {
       id: 1,
@@ -82,8 +87,12 @@ const LivesList = () => {
     <Container>
       {groupLivesByDate.map((group) => (
         <section>
-          <time>{`${moment(group.date).format('MM-DD-YY')}`}</time> |{' '}
-          <time>{moment(group.date).fromNow()}</time>
+          <time>{`${
+            language === 'en'
+              ? moment(group.date).format('DD-MM-YY')
+              : moment(group.date).format('MM-DD-YY')
+          }`}</time>{' '}
+          | <time>{moment(group.date).locale(language).fromNow()}</time>
           <ul>
             {group.lives.map((live) => (
               <li className="live" key={live.id}>
@@ -104,7 +113,7 @@ const LivesList = () => {
 };
 
 const Container = styled.div`
-  width: 79%;
+  width: 100%;
   padding: 20px;
   time {
     display: inline-block;
@@ -122,9 +131,12 @@ const Container = styled.div`
       display: flex;
       justify-content: space-between;
       alignitems: center;
-      padding: 15px 10px;
       margin: 0;
       background-color: ${color.blue};
+      padding: 30px 10px;
+      @media (min-width: 768px) {
+        padding: 15px 10px;
+      }
       &:nth-child(2n + 1) {
         background-color: ${color.lighterGreen};
       }

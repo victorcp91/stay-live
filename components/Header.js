@@ -1,76 +1,100 @@
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import firebase from 'firebase/app';
-import 'firebase/auth';
 import Link from 'next/link';
 
 import { color } from '../libs/variables';
+import LoginModal from '../components/LoginModal';
+import { unregisterUser } from '../store/actions/user';
+import { setLanguage } from '../store/actions/settings';
+import translate from '../libs/language';
 
 const Header = () => {
-  const login = provider => {
-    firebase
-      .auth()
-      .signInWithPopup(provider)
-      .then(function(result) {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        var token = result.credential.accessToken;
-        // The signed-in user info.
-        var user = result.user;
-        console.log(token, user);
-        // ...
-      })
-      .catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // The email of the user's account used.
-        var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        var credential = error.credential;
-        console.log(errorCode, errorMessage, email, credential);
-        // ...
-      });
+  const user = useSelector((state) => state.user);
+  const language = useSelector((state) => state.settings.language);
+
+  const dispatch = useDispatch();
+
+  const [loginModalOpened, setLoginModalOpened] = useState(false);
+
+  const logout = () => {
+    dispatch(unregisterUser());
   };
 
-  const googleLogin = () => {
-    if (firebase.apps.length) {
-      const provider = new firebase.auth.GoogleAuthProvider();
-
-      login(provider);
-    }
-  };
-
-  const facebookLogin = () => {
-    if (firebase.apps.length) {
-      const provider = new firebase.auth.FacebookAuthProvider();
-      login(provider);
-    }
-  };
-
-  const twitterLogin = () => {
-    if (firebase.apps.length) {
-      const provider = new firebase.auth.TwitterAuthProvider();
-      login(provider);
-    }
-  };
-
-  const openSocialLoginModal = () => {
-    console.log('open');
+  const changeLanguage = (lang) => {
+    dispatch(setLanguage(lang));
   };
 
   return (
-    <Container>
-      <div>
-        <Link href="/">
-          <a>
-            <h1>Stay Live</h1>
-          </a>
-        </Link>
-        <button onClick={openSocialLoginModal}>Fazer login</button>
-        {/* <button onClick={googleLogin}>Google</button>
-        <button onClick={facebookLogin}>Facebook</button>
-        <button onClick={twitterLogin}>Twitter</button> */}
-      </div>
-    </Container>
+    <>
+      <Container>
+        <div className="headerContent">
+          <Link href="/">
+            <a>
+              <h1>Stay Live</h1>
+            </a>
+          </Link>
+
+          <ul className="languages">
+            <li>
+              <button
+                className={language === 'pt-br' ? 'active' : ''}
+                type="button"
+                onClick={() => changeLanguage('pt-br')}
+              >
+                Português
+              </button>
+            </li>
+            <li>
+              <button
+                className={language === 'en' ? 'active' : ''}
+                type="button"
+                onClick={() => changeLanguage('en')}
+              >
+                English
+              </button>
+            </li>
+            <li>
+              <button
+                className={language === 'es' ? 'active' : ''}
+                type="button"
+                onClick={() => changeLanguage('es')}
+              >
+                Español
+              </button>
+            </li>
+          </ul>
+
+          {user && user.uid ? (
+            <div className="userMenu">
+              <div className="userAvatar">
+                {user.photoURL ? (
+                  <img src={user.photoURL} alt={user.displayName} />
+                ) : (
+                  <span />
+                )}
+              </div>
+              <ul className="userOptions">
+                <li>{translate('profile', language)}</li>
+                <li>{translate('addLive', language)}</li>
+                <li>
+                  <button onClick={logout} type="button">
+                    {translate('logout', language)}
+                  </button>
+                </li>
+              </ul>
+            </div>
+          ) : (
+            <button onClick={() => setLoginModalOpened(true)}>
+              {translate('login', language)}
+            </button>
+          )}
+        </div>
+      </Container>
+      {loginModalOpened && (
+        <LoginModal close={() => setLoginModalOpened(false)} />
+      )}
+    </>
   );
 };
 
@@ -84,7 +108,7 @@ const Container = styled.header`
   left: 0;
   height: 58px;
   z-index: 1;
-  div {
+  .headerContent {
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -95,17 +119,81 @@ const Container = styled.header`
     color: ${color.white};
     a {
       text-decoration: none;
+      margin-left: 40px;
+      display: flex;
+      align-items: center;
+      @media (min-width: 768px) {
+        margin-left: 0;
+      }
     }
     h1 {
       margin: 0;
       padding: 0;
       color: white;
+      font-size: 20px;
+      @media (min-width: 768px) {
+        margin: 0 20px;
+        font-size: 24px;
+      }
     }
     button {
       border: 1px solid ${color.white};
       background: none;
       font-weight: bold;
       color: ${color.white};
+    }
+    .languages {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      button {
+        margin: 0 10px;
+        @media (min-width: 768px) {
+          margin: 0 20px;
+        }
+        font-weight: bold;
+        font-size: 16px;
+        border: none;
+        &.active {
+          color: ${color.orange};
+        }
+      }
+    }
+    .userMenu {
+      position: relative;
+      .userAvatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+      .userOptions {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 24px;
+        list-style: none;
+        background-color: ${color.green};
+        padding: 10px 20px;
+        text-align: center;
+        font-size: 14px;
+        li {
+          white-space: nowrap;
+          margin: 15px 0;
+        }
+      }
+      &:hover {
+        .userOptions {
+          display: block;
+        }
+      }
     }
   }
 `;

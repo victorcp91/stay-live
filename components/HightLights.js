@@ -12,7 +12,7 @@ const HightLights = () => {
       img:
         'https://abrilsuperinteressante.files.wordpress.com/2020/02/si_britney_toxic_fb.jpg?quality=70&strip=info',
       channel: 'youtube',
-      link: 'https://youtube.com'
+      link: 'https://youtube.com',
     },
     {
       title: 'Britney Returns',
@@ -20,7 +20,7 @@ const HightLights = () => {
       img:
         'https://abrilsuperinteressante.files.wordpress.com/2020/02/si_britney_toxic_fb.jpg?quality=70&strip=info',
       channel: 'youtube',
-      link: 'https://youtube.com'
+      link: 'https://youtube.com',
     },
     {
       title: 'Britney Returns',
@@ -28,7 +28,7 @@ const HightLights = () => {
       img:
         'https://abrilsuperinteressante.files.wordpress.com/2020/02/si_britney_toxic_fb.jpg?quality=70&strip=info',
       channel: 'youtube',
-      link: 'https://youtube.com'
+      link: 'https://youtube.com',
     },
     {
       title: 'Britney Returns',
@@ -36,7 +36,7 @@ const HightLights = () => {
       img:
         'https://abrilsuperinteressante.files.wordpress.com/2020/02/si_britney_toxic_fb.jpg?quality=70&strip=info',
       channel: 'youtube',
-      link: 'https://youtube.com'
+      link: 'https://youtube.com',
     },
     {
       title: 'Britney Returns',
@@ -44,12 +44,12 @@ const HightLights = () => {
       img:
         'https://abrilsuperinteressante.files.wordpress.com/2020/02/si_britney_toxic_fb.jpg?quality=70&strip=info',
       channel: 'youtube',
-      link: 'https://youtube.com'
-    }
+      link: 'https://youtube.com',
+    },
   ];
   return (
     <Container>
-      {lives.map(live => (
+      {lives.map((live) => (
         <a href={live.link} className="live">
           <div className="imageContainer">
             <img
@@ -74,20 +74,24 @@ const Container = styled.div`
   flex-wrap: wrap;
   flex: 1;
   align-items: center;
-  padding: 20px 0 20px 20px;
+  padding: 20px;
   position: relative;
   .live {
-    margin: 0 20px 20px 0;
+    margin: 0 0 40px 0;
     text-decoration: none;
     color: ${color.dark1};
     font-size: 12px;
     position: unset;
     box-shadow: 10px 10px 50px rgba(66, 129, 164, 0.4);
-    width: 24%;
+    width: 100%;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     background-color: rgba(66, 129, 164, 0.3);
     transition: background-color 0.5s ease-in-out, transform 0.3s ease-in-out;
+    @media (min-width: 768px) {
+      width: 30%;
+      margin: 1.5%;
+    }
     .imageContainer {
       width: 100%;
       padding-top: 56.25%;
@@ -112,9 +116,9 @@ const Container = styled.div`
       }
     }
     .textInfo {
-      height: 80px;
+      min-height: 80px;
       overflow: hidden;
-      padding: 5px 10px;
+      padding: 10px 10px 20px 10px;
       .title {
         margin: 0 5px 0 0;
         padding: 0;
@@ -133,12 +137,16 @@ const Container = styled.div`
         font-size: 14px;
       }
     }
-    &:first-child {
-      font-size: 16px;
-      width: 50%;
-      .channel {
-        color: ${color.orange};
-        font-size: 14px;
+
+    @media (min-width: 768px) {
+      &:first-child {
+        font-size: 16px;
+        width: 63%;
+        margin: 1.5%;
+        .channel {
+          color: ${color.orange};
+          font-size: 14px;
+        }
       }
     }
   }
