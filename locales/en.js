@@ -36,6 +36,25 @@ export const en = {
   kids: 'Kids',
   culture: 'Culture',
   interview: 'Interview',
+
+  // Profile
+  savedLives: 'My list',
+  myHistory: 'My contribution history',
+  edit: 'Edit',
+  delete: 'Delete',
+
+  // Register Live
+  liveInfo: 'Live data',
+  title: 'Title',
+  description: 'Description',
+  clear: 'Clear',
+  selectImage: 'Select a presentation image',
+  selectCategories: 'Select up to 3 categories:',
+  category: 'Category',
+  subcategory: 'Subcategory',
+  dateTime: 'Date and time',
+  liveLink: 'Live link',
+  registerLive: 'Register live',
 };
 
 export default en;

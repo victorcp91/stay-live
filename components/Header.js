@@ -42,7 +42,8 @@ const Header = () => {
                 type="button"
                 onClick={() => changeLanguage('pt-br')}
               >
-                Português
+                <span className="desktop">Português</span>
+                <span className="mobile">PT</span>
               </button>
             </li>
             <li>
@@ -51,7 +52,8 @@ const Header = () => {
                 type="button"
                 onClick={() => changeLanguage('en')}
               >
-                English
+                <span className="desktop">English</span>
+                <span className="mobile">EN</span>
               </button>
             </li>
             <li>
@@ -60,7 +62,8 @@ const Header = () => {
                 type="button"
                 onClick={() => changeLanguage('es')}
               >
-                Español
+                <span className="desktop">Español</span>
+                <span className="mobile">ES</span>
               </button>
             </li>
           </ul>
@@ -76,7 +79,7 @@ const Header = () => {
               </div>
               <ul className="userOptions">
                 <li>
-                  <Link href={`/profile/`}>
+                  <Link href={`/profile`}>
                     <a>{translate('profile', language)}</a>
                   </Link>
                 </li>
@@ -156,6 +159,17 @@ const Container = styled.header`
       align-items: center;
       margin: 0;
       padding: 0;
+      .desktop {
+        display: none;
+      }
+      @media (min-width: 768px) {
+        .mobile {
+          display: none;
+        }
+        .desktop {
+          display: inline-block;
+        }
+      }
       button {
         margin: 0 10px;
         @media (min-width: 768px) {

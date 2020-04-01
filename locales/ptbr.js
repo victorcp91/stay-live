@@ -36,6 +36,29 @@ export const pt = {
   kids: 'Infantil',
   culture: 'Cultura',
   interview: 'Entrevistas',
+
+  // Profile
+  savedLives: 'Minha lista',
+  myHistory: 'Meu histórico de contribuição',
+  edit: 'Editar',
+  delete: 'Deletar',
+
+  // Register Live
+  liveInfo: 'Informações da live',
+  title: 'Título',
+  description: 'Descrição',
+  clear: 'Apagar',
+  selectImage: 'Selecione uma imagem de apresentação',
+  selectCategories: 'Selecione até 3 categorias:',
+  category: 'Categoria',
+  subcategory: 'Subcategoria',
+  dateTime: 'Data e hora',
+  liveLink: 'Link para a live',
+  registerLive: 'Cadastrar live',
+
+  // Edit Live
+  editLiveInfo: 'Edição da live',
+  save: 'Salvar alterações',
 };
 
 export default pt;

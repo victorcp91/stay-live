@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import * as firebase from 'firebase/app';
 import 'firebase/analytics';
 import firebaseConfig from '../config/firebaseConfig';
+import '../libs/datetime.css';
 
 import user from '../store/reducers/user';
 import settings from '../store/reducers/settings';

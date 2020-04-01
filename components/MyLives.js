@@ -7,8 +7,9 @@ import 'moment/locale/pt-br';
 import 'moment/locale/es';
 
 import { color } from '../libs/variables';
+import translate from '../libs/language';
 
-const LivesList = ({ lives }) => {
+const LivesList = ({ lives, creator }) => {
   const language = useSelector((state) => state.settings.language);
 
   const orderedLives = useMemo(() => {
@@ -55,6 +56,16 @@ const LivesList = ({ lives }) => {
                 <div className="time">
                   {moment(live.startDate).format('hh:mm')}
                 </div>
+                {creator && (
+                  <div className="action-area">
+                    <Link href={`/editLive/${live.id}`}>
+                      <a className="edit">{translate('edit', language)}</a>
+                    </Link>
+                    <button type="button" className="delete">
+                      {translate('delete', language)}
+                    </button>
+                  </div>
+                )}
               </li>
             ))}
           </ul>
@@ -82,6 +93,7 @@ const Container = styled.div`
     color: white;
     .live {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       alignitems: center;
       margin: 0;
@@ -108,6 +120,21 @@ const Container = styled.div`
       .time {
         width: 41px;
         font-size: 14px;
+      }
+      .action-area {
+        margin-top: 20px;
+      }
+      .edit {
+        margin: 0 10px;
+        color: ${color.white};
+      }
+      .delete {
+        background: none;
+        border: none;
+        margin: 0 10px;
+        text-decoration: underline;
+        color: ${color.red};
+        font-size: 16px;
       }
     }
   }

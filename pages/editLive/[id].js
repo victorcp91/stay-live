@@ -39,10 +39,10 @@ const AddLive = () => {
   return (
     <>
       <Head>
-        <title>StayHome + Live</title>
+        <title>StayHome - Live</title>
       </Head>
       <Main onSubmit={() => {}}>
-        <h2>{translate('liveInfo', language)}</h2>
+        <h2>{translate('editLiveInfo', language)}</h2>
         <div className="main-info">
           <div className="text-info">
             <input
@@ -165,7 +165,7 @@ const AddLive = () => {
           onChange={(e) => setLink(e.currentTarget.value)}
         />
 
-        <button type="submit">{translate('registerLive', language)}</button>
+        <button type="submit">{translate('save', language)}</button>
       </Main>
     </>
   );

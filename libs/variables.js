@@ -9,4 +9,5 @@ export const color = {
   dark1: '#617073',
   dark2: '#595959',
   white: '#FFF',
+  red: '#fa5c5c',
 };

@@ -1,12 +1,16 @@
 import Head from 'next/head';
 import Link from 'next/link';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { color } from '../../libs/variables';
+import translate from '../../libs/language';
 
 import MyLives from '../../components/MyLives';
 
 const Profile = () => {
+  const language = useSelector((state) => state.settings.language);
+
   const history = [
     {
       id: 1,
@@ -57,20 +61,20 @@ const Profile = () => {
   return (
     <>
       <Head>
-        <title>StayHome - Profile</title>
+        <title>StayHome - {translate('profile', language)}</title>
       </Head>
       <Main>
         <Link href="/registerLive">
-          <a className="addLive">Adicionar Live</a>
+          <a className="addLive">{translate('registerLive', language)}</a>
         </Link>
         <div className="lives">
           <div>
-            <h2 className="listTitle">My saved lives</h2>
+            <h2 className="listTitle">{translate('savedLives', language)}</h2>
             <MyLives lives={history} />
           </div>
           <div>
-            <h2 className="listTitle">My posted history</h2>
-            <MyLives lives={history} />
+            <h2 className="listTitle">{translate('myHistory', language)}</h2>
+            <MyLives lives={history} creator />
           </div>
         </div>
       </Main>
@@ -88,7 +92,7 @@ const Main = styled.main`
     padding: 5px 10px;
     border: 1px solid ${color.blue};
     color: ${color.blue};
-    font-size: 25px;
+    font-size: 20px;
     font-weight: bold;
     background: none;
     margin: 80px 0;

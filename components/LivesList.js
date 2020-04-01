@@ -8,8 +8,11 @@ import 'moment/locale/es';
 
 import { color } from '../libs/variables';
 
+import HeartIcon from '../assets/icons/Heart';
+
 const LivesList = () => {
   const language = useSelector((state) => state.settings.language);
+  const user = useSelector((state) => state.user);
 
   const lives = [
     {
@@ -99,6 +102,15 @@ const LivesList = () => {
                 <a href={live.link} target="_blank">
                   <h3 className="title">{live.title}</h3>
                 </a>
+                {user && user.uid ? (
+                  <button
+                    className="like-button"
+                    type="button"
+                    onClick={() => {}}
+                  >
+                    <HeartIcon />
+                  </button>
+                ) : null}
                 <div className="description">{live.description}</div>
                 <div className="time">
                   {moment(live.startDate).format('hh:mm')}
@@ -150,12 +162,16 @@ const Container = styled.div`
       }
       .description,
       .title {
-        width: 200px;
+        width: 100px;
         font-size: 14px;
       }
       .time {
         width: 41px;
         font-size: 14px;
+      }
+      .like-button {
+        background: none;
+        border: none;
       }
     }
   }

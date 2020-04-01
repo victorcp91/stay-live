@@ -13,7 +13,9 @@ class MyDocument extends Document {
         <Head>
           <link
             href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
-            rel="stylesheet"
+            rel="preload"
+            as="font"
+            crossOrigin=""
           />
           <style>{`
             html,
@@ -24,7 +26,7 @@ class MyDocument extends Document {
             * {
               box-sizing: border-box;
             }
-            button {
+            button,input {
               cursor: pointer;
               outline: none;
            }
