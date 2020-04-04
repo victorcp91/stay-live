@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import DateTime from 'react-datetime';
 import 'moment/locale/pt-br';
 import 'moment/locale/es';
+import axios from 'axios';
 
 import { color } from '../../libs/variables';
 import translate from '../../libs/language';
@@ -17,10 +18,12 @@ const AddLive = () => {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState();
-  const [file, setFile] = useState();
+  const [channelOrigin, setChannelOrigin] = useState('youtube');
+  const [channel, setChannel] = useState();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTimer, setSearchTimer] = useState();
+  const [searchResult, setSearchResult] = useState([]);
   const [datetime, setDatetime] = useState();
-  const [link, setLink] = useState();
 
   const [category1, setCategory1] = useState();
   const [subcategory1, setSubCategory1] = useState();
@@ -35,6 +38,49 @@ const AddLive = () => {
   };
 
   const registerLive = () => {};
+
+  const search = () => {
+    if (channelOrigin === 'youtube') {
+      gapi.client.youtube.search
+        .list({
+          part: 'snippet',
+          q: searchTerm,
+          type: 'channel',
+        })
+        .then(
+          function (response) {
+            // Handle the results
+            console.log(response.result.items);
+            setSearchResult(response.result.items);
+          },
+          function (err) {}
+        );
+    } else {
+      axios
+        .get(`https://www.instagram.com/${searchTerm}/?__a=1`)
+        .then((response) => {
+          setSearchResult([response.data.graphql.user]);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
+
+  useEffect(() => {
+    setSearchResult([]);
+    if (searchTerm) {
+      const timer = setTimeout(() => {
+        search();
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [searchTerm]);
+
+  useEffect(() => {
+    setSearchResult([]);
+    setSearchTerm('');
+  }, [channelOrigin]);
 
   return (
     <>
@@ -57,38 +103,102 @@ const AddLive = () => {
               onChange={(e) => setDescription(e.currentTarget.value)}
             />
           </div>
-          <div className="image-area">
-            {image ? (
-              <>
-                <img src={image} alt="preview" />
-                <button
-                  className="delete"
-                  type="button"
-                  onClick={() => {
-                    setFile();
-                    setImage();
-                  }}
-                >
-                  {translate('clear', language)}
-                </button>
-              </>
+          <div className="channel-area">
+            {channel ? (
+              channelOrigin === 'youtube' ? (
+                <div className="selected-channel">
+                  <img
+                    src={channel.snippet.thumbnails.high.url}
+                    alt={channel.snippet.channelTitle}
+                  />
+                  <button className="delete" onClick={() => setChannel()}>
+                    Remover
+                  </button>
+                </div>
+              ) : (
+                <div className="selected-channel">
+                  <img
+                    src={channel.profile_pic_url_hd}
+                    alt={channel.full_name}
+                  />
+                  <button className="delete" onClick={() => setChannel()}>
+                    Remover
+                  </button>
+                </div>
+              )
             ) : (
               <>
-                <label htmlFor="imageSelector">
-                  {translate('selectImage', language)}
-                </label>
-                <input
-                  type="file"
-                  name="image"
-                  id="imageSelector"
-                  accept="image/jpg,image/png,image/jpeg,image/gif"
-                  onChange={handleFile}
-                />
+                <select
+                  className="channel-selector"
+                  value={channelOrigin}
+                  onChange={(e) => setChannelOrigin(e.currentTarget.value)}
+                >
+                  <option value="youtube">Youtube</option>
+                  <option value="instagram">Instagram</option>
+                </select>
+                <div>
+                  <span
+                    className={channelOrigin === 'instagram' ? 'insta' : ''}
+                  >
+                    <input
+                      type="search"
+                      name=""
+                      id=""
+                      placeholder={
+                        channelOrigin === 'youtube'
+                          ? translate('youtubeChannelSearch', language)
+                          : translate('instagramChannelSearch', language)
+                      }
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.currentTarget.value)}
+                    />
+                  </span>
+                </div>
+                <ul>
+                  {searchTerm &&
+                    searchResult.map((item) => (
+                      <li key={item.id.channelId}>
+                        <button type="button" onClick={() => setChannel(item)}>
+                          <div className="image-container">
+                            <img
+                              src={
+                                channelOrigin === 'youtube'
+                                  ? item.snippet.thumbnails.default.url
+                                  : item.profile_pic_url
+                              }
+                              alt={
+                                channelOrigin === 'youtube'
+                                  ? item.snippet.channelTitle
+                                  : item.full_name
+                              }
+                            />
+                          </div>
+
+                          <div className="channel-info">
+                            <h3>
+                              {channelOrigin === 'youtube' ? (
+                                item.snippet.channelTitle
+                              ) : (
+                                <>
+                                  {item.full_name}
+                                  <span> @{item.username}</span>
+                                </>
+                              )}
+                            </h3>
+                            <p>
+                              {channelOrigin === 'youtube'
+                                ? item.snippet.description
+                                : item.biography}
+                            </p>
+                          </div>
+                        </button>
+                      </li>
+                    ))}
+                </ul>
               </>
             )}
           </div>
         </div>
-
         <p>{translate('selectCategories', language)}</p>
         <div className="category">
           <select
@@ -155,17 +265,12 @@ const AddLive = () => {
           timeFormat={true}
           locale={language}
           value={datetime}
-          onChange={(e) => setDatetime(e.currentTarget.value)}
+          onChange={setDatetime}
         />
 
-        <input
-          type="text"
-          placeholder={translate('liveLink', language)}
-          value={link}
-          onChange={(e) => setLink(e.currentTarget.value)}
-        />
-
-        <button type="submit">{translate('registerLive', language)}</button>
+        <button className="register-button" type="submit">
+          {translate('registerLive', language)}
+        </button>
       </Main>
     </>
   );
@@ -185,48 +290,95 @@ const Main = styled.form`
     flex-wrap: wrap;
   }
   .text-info,
-  .image-area {
+  .channel-area {
     display: flex;
     flex-direction: column;
     width: 45%;
     min-width: 300px;
+    .selected-channel {
+      text-align: center;
+      img {
+        width: 100%;
+        height: auto;
+      }
+      .delete {
+        border: none;
+        font-size: 18px;
+        color: ${color.red};
+        text-decoration: underline;
+        margin: 0 auto;
+        background: none;
+      }
+    }
   }
-  .image-area {
-    img {
-      width: auto;
-      max-width: 100%;
-      height: auto;
-      max-height: 200px;
-      object-fit: contain;
+  .channel-selector {
+    background-color: white;
+    margin-bottom: 30px;
+  }
+  .insta {
+    position: relative;
+    &:before {
+      content: '@';
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
     }
     input {
-      color: transparent;
+      padding-left: 25px;
+    }
+  }
+
+  .channel-area {
+    ul {
+      list-style: none;
+      margin: 0;
       padding: 0;
-    }
-    input::-webkit-file-upload-button {
-      visibility: hidden;
-    }
-    input::before {
-      content: 'Upload';
-      display: inline-block;
-      border: 1px solid ${color.blue};
-      padding: 5px 8px;
-      outline: none;
-      white-space: nowrap;
-      -webkit-user-select: none;
-      cursor: pointer;
-      text-shadow: 1px 1px #fff;
-      font-weight: 700;
-      font-size: 15px;
-      color: ${color.blue};
-      padding: 10px 15px;
-    }
-    .delete {
-      border: none;
-      font-size: 18px;
-      color: ${color.red};
-      text-decoration: underline;
-      margin: 0 auto;
+      li {
+        margin: 0;
+        padding: 0;
+      }
+      button {
+        margin: 0;
+        padding: 0;
+        text-align: left;
+        display: flex;
+        height: 80px;
+        overflow: hidden;
+        width: 100%;
+        margin-bottom: 10px;
+        background-color: ${color.lightGreen};
+        border: none;
+        color: ${color.dark2};
+        .image-container {
+          min-width: 80px;
+          min-height: 80px;
+          max-width: 80px;
+          max-height: 80px;
+          position: relative;
+          img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+          }
+        }
+        .channel-info {
+          padding: 5px;
+          h3,
+          p {
+            margin: 0;
+            padding: 0;
+          }
+          h3 {
+            margin-bottom: 5px;
+            font-size: 14px;
+          }
+          p {
+            font-size: 12px;
+          }
+        }
+      }
     }
   }
   h2 {
@@ -243,7 +395,6 @@ const Main = styled.form`
   }
   input,
   textarea,
-  button,
   select {
     font-size: 16px;
     margin-bottom: 30px;
@@ -266,7 +417,7 @@ const Main = styled.form`
   input[type='datetime-local'] {
     width: 350px;
   }
-  button {
+  .register-button {
     width: 100%;
     max-width: fit-content;
     padding: 10px 20px;
@@ -274,6 +425,7 @@ const Main = styled.form`
     color: ${color.blue};
     background: none;
     font-weight: bold;
+    font-size: 20px;
     &:hover {
       border: 1px solid ${color.orange};
       color: ${color.orange};

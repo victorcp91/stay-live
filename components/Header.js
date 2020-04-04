@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Link from 'next/link';
 
@@ -14,11 +15,13 @@ const Header = () => {
   const language = useSelector((state) => state.settings.language);
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const [loginModalOpened, setLoginModalOpened] = useState(false);
 
   const logout = () => {
     dispatch(unregisterUser());
+    router.push('/');
   };
 
   const changeLanguage = (lang) => {

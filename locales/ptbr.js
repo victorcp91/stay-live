@@ -55,6 +55,8 @@ export const pt = {
   dateTime: 'Data e hora',
   liveLink: 'Link para a live',
   registerLive: 'Cadastrar live',
+  youtubeChannelSearch: 'Busque pelo nome do canal',
+  instagramChannelSearch: 'nomedousuario',
 
   // Edit Live
   editLiveInfo: 'Edição da live',

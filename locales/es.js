@@ -55,6 +55,12 @@ export const es = {
   dateTime: 'Data e hora',
   liveLink: 'Link para a live',
   registerLive: 'Cadastrar live',
+  youtubeChannelSearch: 'Busque pelo nome do canal',
+  instagramChannelSearch: 'username',
+
+  // Edit Live
+  editLiveInfo: 'Edição da live',
+  save: 'Salvar alterações',
 };
 
 export default es;

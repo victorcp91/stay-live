@@ -31,12 +31,27 @@ const store = createStore(persistedReducer);
 
 const persistor = persistStore(store);
 
+const loadYoutubeApi = () => {
+  const script = document.createElement('script');
+  script.src = 'https://apis.google.com/js/client.js';
+
+  script.onload = () => {
+    window.gapi.load('client', () => {
+      window.gapi.client.setApiKey(process.env.apiKey);
+      window.gapi.client.load('youtube', 'v3');
+    });
+  };
+
+  document.body.appendChild(script);
+};
+
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
       firebase.analytics();
     }
+    loadYoutubeApi();
   }, []);
 
   return (
