@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -10,6 +10,7 @@ import axios from 'axios';
 
 import { color } from '../../libs/variables';
 import translate from '../../libs/language';
+import categories from '../../libs/categories';
 
 import MyLives from '../../components/MyLives';
 
@@ -82,6 +83,26 @@ const AddLive = () => {
     setSearchTerm('');
   }, [channelOrigin]);
 
+  const getSubCategories = (category) => {
+    const cat = categories.find((cat) => cat.value === category);
+    if (cat && cat.subFilters) {
+      return cat.subFilters;
+    }
+    return false;
+  };
+
+  const languageList = useMemo(
+    () => (
+      <select id="language">
+        <option value="all">{translate('language', language)}</option>
+        <option value="pt">{translate('portuguese', language)}</option>
+        <option value="en">{translate('english', language)}</option>
+        <option value="es">{translate('spanish', language)}</option>
+      </select>
+    ),
+    [language]
+  );
+
   return (
     <>
       <Head>
@@ -102,30 +123,32 @@ const AddLive = () => {
               value={description}
               onChange={(e) => setDescription(e.currentTarget.value)}
             />
+            <div className="languageSelector">{languageList}</div>
           </div>
           <div className="channel-area">
             {channel ? (
-              channelOrigin === 'youtube' ? (
-                <div className="selected-channel">
-                  <img
-                    src={channel.snippet.thumbnails.high.url}
-                    alt={channel.snippet.channelTitle}
-                  />
-                  <button className="delete" onClick={() => setChannel()}>
-                    Remover
-                  </button>
-                </div>
-              ) : (
-                <div className="selected-channel">
-                  <img
-                    src={channel.profile_pic_url_hd}
-                    alt={channel.full_name}
-                  />
-                  <button className="delete" onClick={() => setChannel()}>
-                    Remover
-                  </button>
-                </div>
-              )
+              <div className="selected-channel">
+                <img
+                  src={
+                    channelOrigin === 'youtube'
+                      ? channel.snippet.thumbnails.high.url
+                      : channel.profile_pic_url_hd
+                  }
+                  alt={
+                    channelOrigin === 'youtube'
+                      ? channel.snippet.channelTitle
+                      : channel.full_name
+                  }
+                />
+                <h2>
+                  {channelOrigin === 'youtube'
+                    ? channel.snippet.channelTitle
+                    : channel.full_name}
+                </h2>
+                <button className="delete" onClick={() => setChannel()}>
+                  Remover
+                </button>
+              </div>
             ) : (
               <>
                 <select
@@ -206,60 +229,123 @@ const AddLive = () => {
             onChange={(e) => setCategory1(e.currentTarget.value)}
           >
             <option value="">{translate('category', language)}</option>
-            <option value="1">option1</option>
-            <option value="2">option2</option>
-            <option value="3">option3</option>
+            {categories.map((cat) => (
+              <option
+                value={cat.value}
+                disabled={
+                  !cat.subFilters &&
+                  (cat.value === category2 || cat.value === category3)
+                }
+              >
+                {translate(cat.value, language)}
+              </option>
+            ))}
           </select>
-          <select
-            value={subcategory1}
-            onChange={(e) => setSubCategory1(e.currentTarget.value)}
-          >
-            <option value="">{translate('subcategory', language)}</option>
-            <option value="1">option1</option>
-            <option value="2">option2</option>
-            <option value="3">option3</option>
-          </select>
+          {getSubCategories(category1) && (
+            <select
+              value={subcategory1}
+              onChange={(e) => setSubCategory1(e.currentTarget.value)}
+            >
+              <option value="">{translate('subcategory', language)}</option>
+              {getSubCategories(category1).map((cat) => (
+                <option
+                  value={cat.value}
+                  disabled={
+                    ((category1 === category2 || category1 === category3) &&
+                      cat.value === subcategory2) ||
+                    cat.value === subcategory3
+                  }
+                >
+                  {translate(cat.value, language)}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
-        <div className="category">
-          <select
-            value={category2}
-            onChange={(e) => setCategory2(e.currentTarget.value)}
-          >
-            <option value="">{translate('category', language)}</option>
-            <option value="1">option1</option>
-            <option value="2">option2</option>
-            <option value="3">option3</option>
-          </select>
-          <select
-            value={subcategory2}
-            onChange={(e) => setSubCategory2(e.currentTarget.value)}
-          >
-            <option value="">{translate('subcategory', language)}</option>
-            <option value="1">option1</option>
-            <option value="2">option2</option>
-            <option value="3">option3</option>
-          </select>
-        </div>
-        <div className="category">
-          <select
-            value={category3}
-            onChange={(e) => setCategory3(e.currentTarget.value)}
-          >
-            <option value="">{translate('category', language)}</option>
-            <option value="1">option1</option>
-            <option value="2">option2</option>
-            <option value="3">option3</option>
-          </select>
-          <select
-            value={subcategory3}
-            onChange={(e) => setSubCategory3(e.currentTarget.value)}
-          >
-            <option value="">{translate('subcategory', language)}</option>
-            <option value="1">option1</option>
-            <option value="2">option2</option>
-            <option value="3">option3</option>
-          </select>
-        </div>
+        {category1 && (
+          <div className="category">
+            <select
+              value={category2}
+              onChange={(e) => setCategory2(e.currentTarget.value)}
+            >
+              <option value="">{translate('category', language)}</option>
+              {categories.map((cat) => (
+                <option
+                  value={cat.value}
+                  disabled={
+                    !cat.subFilters &&
+                    (cat.value === category1 || cat.value === category3)
+                  }
+                >
+                  {translate(cat.value, language)}
+                </option>
+              ))}
+            </select>
+            {getSubCategories(category2) && (
+              <select
+                value={subcategory2}
+                onChange={(e) => setSubCategory2(e.currentTarget.value)}
+              >
+                <option value="">{translate('subcategory', language)}</option>
+                {getSubCategories(category2).map((cat) => (
+                  <option
+                    value={cat.value}
+                    disabled={
+                      ((category2 === category1 || category2 === category3) &&
+                        cat.value === subcategory1) ||
+                      cat.value === subcategory3
+                    }
+                  >
+                    {translate(cat.value, language)}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+        )}
+
+        {category2 && (
+          <div className="category">
+            <select
+              value={category3}
+              onChange={(e) => setCategory3(e.currentTarget.value)}
+            >
+              <option value="">{translate('category', language)}</option>
+              {categories.map((cat) => (
+                <option
+                  value={cat.value}
+                  disabled={
+                    !cat.subFilters &&
+                    (cat.value === category1 || cat.value === category2)
+                  }
+                >
+                  {translate(cat.value, language)}
+                </option>
+              ))}
+            </select>
+            {getSubCategories(category3) && (
+              <select
+                value={subcategory3}
+                onChange={(e) => setSubCategory3(e.currentTarget.value)}
+              >
+                <option value="">{translate('subcategory', language)}</option>
+                {getSubCategories(category3).map((cat) => (
+                  <option
+                    value={cat.value}
+                    disabled={
+                      ((category3 === category1 || category3 === category2) &&
+                        cat.value === subcategory1) ||
+                      cat.value === subcategory2
+                    }
+                  >
+                    {translate(cat.value, language)}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+        )}
+
         <label htmlFor="date">{translate('dateTime', language)}</label>
         <DateTime
           timeFormat={true}
@@ -288,6 +374,9 @@ const Main = styled.form`
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    .languageSelector {
+      margin-bottom: 20px;
+    }
   }
   .text-info,
   .channel-area {
@@ -297,6 +386,9 @@ const Main = styled.form`
     min-width: 300px;
     .selected-channel {
       text-align: center;
+      h2 {
+        margin: 0;
+      }
       img {
         width: 100%;
         height: auto;
@@ -426,6 +518,7 @@ const Main = styled.form`
     background: none;
     font-weight: bold;
     font-size: 20px;
+    margin-top: 50px;
     &:hover {
       border: 1px solid ${color.orange};
       color: ${color.orange};
@@ -439,13 +532,15 @@ const Main = styled.form`
   }
   .category {
     padding: 10px 0;
-    background-color: ${color.lighterGreen};
     width: 100%;
     max-width: 450px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
-    margin-bottom: 50px;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    select {
+      margin-bottom: 10px;
+    }
   }
 `;
 

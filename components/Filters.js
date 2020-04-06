@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Link from 'next/link';
 
 import translate from '../libs/language';
+import categories from '../libs/categories';
 
 import { color } from '../libs/variables';
 import countries from '../libs/countries';
@@ -16,36 +17,7 @@ const Filters = () => {
   const [selectedCountry, setSelectedCountry] = useState();
   const [language, setSelectedLanguage] = useState();
   const [selectedCategories, setSelectedCategories] = useState(['all']);
-  const [categories] = useState([
-    { value: 'all' },
-    {
-      value: 'classes',
-      subFilters: [
-        { value: 'science&tecnology' },
-        { value: 'music' },
-        { value: 'cooking' },
-        { value: 'exercises' },
-        { value: 'dancing' },
-        { value: 'style&beauty' },
-        { value: 'languages' },
-        { value: 'others' },
-      ],
-    },
-    { value: 'doItYourself&tutorial' },
-    { value: 'news&politics' },
-    { value: 'style&beauty' },
-    { value: 'science&tecnology' },
-    { value: 'music' },
-    { value: 'pets&animals' },
-    { value: 'comedy' },
-    { value: 'cooking' },
-    { value: 'gaming' },
-    { value: 'bookClub' },
-    { value: 'architecture&design' },
-    { value: 'kids' },
-    { value: 'culture' },
-    { value: 'interview' },
-  ]);
+  const [filterCategories] = useState([{ value: 'all' }, ...categories]);
 
   const [opened, setOpened] = useState(false);
 
@@ -79,7 +51,7 @@ const Filters = () => {
           <label for="language">{translate('language', lang)}:</label>
           {languageList}
         </div>
-        {categories.map((filter) => (
+        {filterCategories.map((filter) => (
           <li
             className={`${filter.subFilters ? 'mainItem' : ''}
               ${
